@@ -35,6 +35,20 @@ func main() {
 	problems := parseLines(lines)
 	counter := 0
 
+	// loop over the problems
+	for i, p := range problems {
+		fmt.Printf("Problem #%d: %s = \n", i+1, p.q)
+		var answer string
+		fmt.Scanf("%s\n", &answer)
+		if answer == p.a {
+			counter++
+		}
+	}
+
+	// print result
+	fmt.Printf("You scored %d out of %d.\n", counter, len(problems))
+}
+
 func parseLines(lines [][]string) []problem {
 	// use exact length, to reduce the overhead of the append function since we know the exact length.
 	ret := make([]problem, len(lines))
