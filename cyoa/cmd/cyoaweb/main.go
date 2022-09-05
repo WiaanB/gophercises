@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"workspace/cyoa"
 )
@@ -10,7 +9,6 @@ import (
 func main() {
 	file := flag.String("file", "../../story.json", "json file with cyoa story")
 	flag.Parse()
-	fmt.Printf("Using the story in %s.\n", *file)
 
 	f, err := os.Open(*file)
 	if err != nil {
