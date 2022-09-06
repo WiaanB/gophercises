@@ -2,11 +2,14 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"net/http"
 	"os"
 	"workspace/cyoa"
 )
 
 func main() {
+	port := flag.Int("port", 3000, "port to start server on")
 	file := flag.String("file", "../../story.json", "json file with cyoa story")
 	flag.Parse()
 
@@ -19,4 +22,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	h := cyoa.NewHandler(story)
+	fmt.Printf("starting the server on port :%d\n", *port)
+	http.ListenAndServe(fmt.Sprintf(":%d", *port), h)
 }
