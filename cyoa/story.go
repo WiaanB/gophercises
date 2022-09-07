@@ -28,24 +28,28 @@ type handler struct {
 
 var htmlTemplate = `
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+  <head>
+    <meta charset="utf-8">
     <title>Choose Your Own Adventure</title>
-</head>
-<body>
-    <h1>{{.Title}}</h1>
-    {{range .Paragraphs}}
-    <p>{{.}}</p>
-    {{end}}
-    <ul>
+  </head>
+  <body>
+    <section class="page">
+      <h1>{{.Title}}</h1>
+      {{range .Paragraphs}}
+        <p>{{.}}</p>
+      {{end}}
+      {{if .Options}}
+        <ul>
         {{range .Options}}
-        <li><a href="/{{.Arc}}">{{.Text}}</a></li>
+          <li><a href="/{{.Arc}}">{{.Text}}</a></li>
         {{end}}
-    </ul>
-	<style>
+        </ul>
+      {{else}}
+        <h3>The End</h3>
+      {{end}}
+    </section>
+    <style>
       body {
         font-family: helvetica, arial;
       }
@@ -85,7 +89,7 @@ var htmlTemplate = `
         text-indent: 1em;
       }
     </style>
-</body>
+  </body>
 </html>
 `
 
