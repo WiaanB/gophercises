@@ -24,6 +24,7 @@ type Option struct {
 
 type handler struct {
 	s Story
+	t *template.Template
 }
 
 var htmlTemplate = `
@@ -99,8 +100,11 @@ func init() {
 	tpl = template.Must(template.New("").Parse(htmlTemplate))
 }
 
-func NewHandler(s Story) http.Handler {
-	return handler{s}
+func NewHandler(s Story, t *template.Template) http.Handler {
+	if t == nil {
+		t = tpl
+	}
+	return handler{s, t}
 }
 
 func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
