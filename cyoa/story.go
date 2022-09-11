@@ -27,6 +27,8 @@ type handler struct {
 	t *template.Template
 }
 
+type HandlerOption func(h *handler)
+
 var htmlTemplate = `
 <!DOCTYPE html>
 <html>
@@ -100,11 +102,18 @@ func init() {
 	tpl = template.Must(template.New("").Parse(htmlTemplate))
 }
 
-func NewHandler(s Story, t *template.Template) http.Handler {
-	if t == nil {
-		t = tpl
+func WithTemplate(t *template.Template) HandlerOption {
+	return func(h *handler) {
+		h.t = t
 	}
-	return handler{s, t}
+}
+
+func NewHandler(s Story, opts ...HandlerOption) http.Handler {
+	h := handler{s, tpl}
+	for _, opt := range opts {
+		opt(&h)
+	}
+	return h
 }
 
 func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
