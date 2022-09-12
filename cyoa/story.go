@@ -124,7 +124,7 @@ func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	path = path[1:]
 
 	if arc, ok := h.s[path]; ok {
-		err := tpl.Execute(w, arc)
+		err := h.t.Execute(w, arc)
 		if err != nil {
 			log.Printf("%v", err)
 			http.Error(w, "Something went wrong...", http.StatusInternalServerError)
