@@ -9,3 +9,6 @@ created a map to redirect short urls to proper links
 
 ## cyoa
 a choose your own adventure website with some optional functions
+
+## html parser
+parsing html doc tags
