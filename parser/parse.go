@@ -1,8 +1,8 @@
 package link
 
 import (
-	"fmt"
 	"io"
+	"strings"
 
 	"golang.org/x/net/html"
 )
@@ -19,11 +19,12 @@ func Parse(r io.Reader) ([]Link, error) {
 	if err != nil {
 		return nil, err
 	}
-	links := linkNodes(doc)
-	for _, l := range links {
-		fmt.Println(l)
+	nodes := linkNodes(doc)
+	var links []Link
+	for _, l := range nodes {
+		links = append(links, buildLink(l))
 	}
-	return nil, nil
+	return links, nil
 }
 
 func linkNodes(n *html.Node) []*html.Node {
@@ -35,4 +36,30 @@ func linkNodes(n *html.Node) []*html.Node {
 		ret = append(ret, linkNodes(c)...)
 	}
 	return ret
+}
+
+func buildLink(n *html.Node) (ret Link) {
+	for _, a := range n.Attr {
+		if a.Key == "href" {
+			ret.Href = a.Val
+			break
+		}
+	}
+	ret.Text = text(n)
+	return
+}
+
+func text(n *html.Node) (ret string) {
+	if n.Type == html.TextNode {
+		ret = n.Data
+		return n.Data
+	}
+	if n.Type != html.ElementNode {
+		return
+	}
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		ret += text(c)
+	}
+	ret = strings.Join(strings.Fields(ret), " ")
+	return
 }
