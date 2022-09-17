@@ -11,4 +11,4 @@ created a map to redirect short urls to proper links
 a choose your own adventure website with some optional functions
 
 ## html parser
-parsing html doc tags
+parsing html doc tags and returning only the links
