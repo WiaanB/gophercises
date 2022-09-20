@@ -12,3 +12,6 @@ a choose your own adventure website with some optional functions
 
 ## html parser
 parsing html doc tags and returning only the links
+
+## sitemap
+using the link parser to create a sitemap
