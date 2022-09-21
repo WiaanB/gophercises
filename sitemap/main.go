@@ -47,7 +47,5 @@ func get(urlStr string) []string {
 	baseUrl := &url.URL{Scheme: reqUrl.Scheme, Host: reqUrl.Host}
 	base := baseUrl.String()
 
-	pages := hrefs(resp.Body, base)
-
-	return pages
+	return hrefs(resp.Body, base)
 }
