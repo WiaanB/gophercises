@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -23,8 +24,16 @@ func main() {
 	baseUrl := &url.URL{Scheme: reqUrl.Scheme, Host: reqUrl.Host}
 	base := baseUrl.String()
 
+	pages := hrefs(resp.Body, base)
+
+	for _, page := range pages {
+		fmt.Println(page)
+	}
+}
+
+func hrefs(r io.Reader, base string) []string {
+	links, _ := link.Parse(r)
 	var hrefs []string
-	links, _ := link.Parse(resp.Body)
 	for _, l := range links {
 		switch {
 		case strings.HasPrefix(l.Href, "/"):
@@ -34,7 +43,5 @@ func main() {
 		}
 	}
 
-	for _, href := range hrefs {
-		fmt.Println(href)
-	}
+	return hrefs
 }
