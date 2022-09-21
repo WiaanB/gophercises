@@ -47,5 +47,21 @@ func get(urlStr string) []string {
 	baseUrl := &url.URL{Scheme: reqUrl.Scheme, Host: reqUrl.Host}
 	base := baseUrl.String()
 
-	return hrefs(resp.Body, base)
+	return filter(hrefs(resp.Body, base), withPrefix(base))
+}
+
+func filter(links []string, keepFn func(string) bool) []string {
+	var ret []string
+	for _, link := range links {
+		if keepFn(link) {
+			ret = append(ret, link)
+		}
+	}
+	return ret
+}
+
+func withPrefix(pfx string) func(string) bool {
+	return func(link string) bool {
+		return strings.HasPrefix(link, pfx)
+	}
 }
