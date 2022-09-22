@@ -14,4 +14,4 @@ a choose your own adventure website with some optional functions
 parsing html doc tags and returning only the links
 
 ## sitemap
-using the link parser to create a sitemap
+using the link parser to create a sitemap of a provided website
