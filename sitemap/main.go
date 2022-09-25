@@ -12,7 +12,7 @@ import (
 
 func main() {
 	urlFlag := flag.String("url", "https://gophercises.com", "url that you want to build a sitemap for")
-	maxDepth := flag.Int("depth", 10, "how many levels deep links should traverse")
+	maxDepth := flag.Int("depth", 3, "how many levels deep links should traverse")
 	flag.Parse()
 
 	pages := bfs(*urlFlag, *maxDepth)
