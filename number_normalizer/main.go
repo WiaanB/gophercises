@@ -16,6 +16,8 @@ const (
 	dbname   = "gophercises"
 )
 
+var numbers []string = []string{"1234567890", "123 456 7891", "(123) 456 7892", "(123) 456-7893", "123-456-7894", "123-456-7890", "1234567892", "(123)456-7892"}
+
 func main() {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s sslmode=disable", host, port, user, password)
 
@@ -31,22 +33,10 @@ func main() {
 	defer db.Close()
 
 	must(createNumberTable(db))
-	_, err = insertPhone(db, "1234567890")
-	must(err)
-	_, err = insertPhone(db, "123 456 7891")
-	must(err)
-	_, err = insertPhone(db, "(123) 456 7892")
-	must(err)
-	_, err = insertPhone(db, "(123) 456-7893")
-	must(err)
-	_, err = insertPhone(db, "123-456-7894")
-	must(err)
-	_, err = insertPhone(db, "123-456-7890")
-	must(err)
-	_, err = insertPhone(db, "1234567892")
-	must(err)
-	_, err = insertPhone(db, "(123)456-7892")
-	must(err)
+	for _, num := range numbers {
+		_, err = insertPhone(db, num)
+		must(err)
+	}
 
 }
 
