@@ -21,3 +21,6 @@ a cli tool for basic task tracking
 
 ## number_normalizer
 normalize some numbers and store them in PostgreSQL
+
+## deck of cards
+a basic deck of cards implementation
