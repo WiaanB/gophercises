@@ -23,4 +23,4 @@ a cli tool for basic task tracking
 normalize some numbers and store them in PostgreSQL
 
 ## deck of cards
-a basic deck of cards implementation
+a basic deck of cards implementation to be used in a future project
