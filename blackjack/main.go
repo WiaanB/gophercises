@@ -20,6 +20,35 @@ func (h Hand) DealerString() string {
 	return h[0].String() + ", **HIDDEN**"
 }
 
+func (h Hand) Score() int {
+	minScore := h.MinScore()
+	if minScore > 11 {
+		return minScore
+	}
+	for _, c := range h {
+		if c.Rank == deck.Ace {
+			// Ace is worth one, and we make it worth 11
+			return minScore + 10
+		}
+	}
+	return minScore
+}
+
+func (h Hand) MinScore() int {
+	score := 0
+	for _, c := range h {
+		score += min(int(c.Rank), 10)
+	}
+	return score
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
 func main() {
 	cards := deck.New(deck.Deck(3), deck.Shuffle())
 	var card deck.Card
@@ -32,9 +61,7 @@ func main() {
 	}
 	var input string
 	for input != "s" {
-		fmt.Println("Player:", player)
-		fmt.Println("Dealer:", dealer.DealerString())
-		fmt.Println("What will you do? (h)it, (s)tand")
+		fmt.Printf("Player: %s\nDealer: %s\n%s", player, dealer.DealerString(), "What will you do? (h)it, (s)tand\n")
 		fmt.Scanf("%s\n", &input)
 		switch input {
 		case "h":
@@ -42,9 +69,26 @@ func main() {
 			player = append(player, card)
 		}
 	}
-	fmt.Println("==FINAL HANDS==")
-	fmt.Println("Player:", player)
-	fmt.Println("Dealer:", dealer)
+	// If dealer score <= 16, we hit
+	// If dealer has a soft 17, then we hit.
+	for dealer.Score() <= 16 || (dealer.Score() == 17 && dealer.MinScore() != 17) {
+		card, cards = draw(cards)
+		dealer = append(dealer, card)
+	}
+	pScore, dScore := player.Score(), dealer.Score()
+	fmt.Printf("==FINAL HANDS==\nPlayer: %s\nScore: %d\nDealer: %s\nScore: %d\n", player, player.Score(), dealer, dealer.Score())
+	switch {
+	case pScore > 21:
+		fmt.Println("You busted")
+	case dScore > 21:
+		fmt.Println("Dealer busted")
+	case pScore > dScore:
+		fmt.Println("You win!")
+	case dScore > pScore:
+		fmt.Println("You lose!")
+	case dScore == pScore:
+		fmt.Println("Draw!")
+	}
 }
 
 func draw(cards []deck.Card) (deck.Card, []deck.Card) {
