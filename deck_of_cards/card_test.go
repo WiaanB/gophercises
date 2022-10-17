@@ -7,11 +7,11 @@ import (
 )
 
 func ExampleCard() {
-	fmt.Print(Card{Rank: Ace, Suit: Heart})
-	fmt.Print(Card{Rank: Two, Suit: Spade})
-	fmt.Print(Card{Rank: Nine, Suit: Diamond})
-	fmt.Print(Card{Rank: Jack, Suit: Club})
-	fmt.Print(Card{Suit: Joker})
+	fmt.Println(Card{Rank: Ace, Suit: Heart})
+	fmt.Println(Card{Rank: Two, Suit: Spade})
+	fmt.Println(Card{Rank: Nine, Suit: Diamond})
+	fmt.Println(Card{Rank: Jack, Suit: Club})
+	fmt.Println(Card{Suit: Joker})
 
 	// Output:
 	// Ace of Hearts
@@ -84,7 +84,7 @@ func TestShuffle(t *testing.T) {
 	original := New()
 	first := original[40]
 	second := original[35]
-	cards := New(Shuffle(original))
+	cards := New(Shuffle())
 	if cards[0] != first {
 		t.Errorf("expected the first card to be %s, received %s", first, cards[0])
 	}

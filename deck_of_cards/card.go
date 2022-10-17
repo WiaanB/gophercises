@@ -54,7 +54,7 @@ func (c Card) String() string {
 	if c.Suit == Joker {
 		return c.Suit.String()
 	}
-	return fmt.Sprintf("%s of %ss\n", c.Rank.String(), c.Suit.String())
+	return fmt.Sprintf("%s of %ss", c.Rank.String(), c.Suit.String())
 }
 
 func New(opts ...func([]Card) []Card) []Card {
@@ -94,7 +94,7 @@ func absRank(c Card) int {
 
 var shuffleRand = rand.New(rand.NewSource(time.Now().Unix()))
 
-func Shuffle(cards []Card) func(cards []Card) []Card {
+func Shuffle() func(cards []Card) []Card {
 	return func(cards []Card) []Card {
 		ret := make([]Card, len(cards))
 		perm := shuffleRand.Perm(len(cards))
