@@ -2,6 +2,8 @@
 
 package deck
 
+import "fmt"
+
 type Suit uint8
 
 const (
@@ -9,7 +11,7 @@ const (
 	Diamond
 	Club
 	Heart
-	Joker
+	Joker // this is a special case
 )
 
 type Rank uint8
@@ -25,10 +27,18 @@ const (
 	Seven
 	Eight
 	Nine
+	Ten
 	Jack
 	Queen
 	King
 )
+
+const (
+	minRank = Ace
+	maxRank = King
+)
+
+var suits = [...]Suit{Spade, Diamond, Club, Heart}
 
 type Card struct {
 	Suit
@@ -36,5 +46,18 @@ type Card struct {
 }
 
 func (c Card) String() string {
-	return ""
+	if c.Suit == Joker {
+		return c.Suit.String()
+	}
+	return fmt.Sprintf("%s of %ss\n", c.Rank.String(), c.Suit.String())
+}
+
+func New() []Card {
+	var cards []Card
+	for _, suit := range suits {
+		for rank := minRank; rank <= maxRank; rank++ {
+			cards = append(cards, Card{Suit: suit, Rank: rank})
+		}
+	}
+	return cards
 }
