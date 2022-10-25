@@ -8,27 +8,49 @@ import (
 type state int8
 
 const (
-	statePlayerTurn state = iota
+	stateBet state = iota
+	statePlayerTurn
 	stateDealerTurn
 	stateHandOver
 )
 
-func New() Game {
-	return Game{
+type Options struct {
+	Decks           int
+	Hands           int
+	BlackjackPayout float64
+}
+
+func New(opts Options) Game {
+	g := Game{
 		state:    statePlayerTurn,
 		dealerAI: dealerAI{},
 		balance:  0,
 	}
+	if opts.Decks == 0 {
+		opts.Decks = 3
+	}
+	if opts.Hands == 0 {
+		opts.Hands = 100
+	}
+	if opts.BlackjackPayout == 0.0 {
+		opts.BlackjackPayout = 1.5
+	}
+	g.nDecks = opts.Decks
+	g.nHands = opts.Hands
+	g.blackjackPayout = opts.BlackjackPayout
+	return g
 }
 
 type Game struct {
-	// unexported fields
-	deck     []deck.Card
-	state    state
-	player   []deck.Card
-	dealer   []deck.Card
-	dealerAI dealerAI
-	balance  int
+	nDecks          int
+	nHands          int
+	deck            []deck.Card
+	state           state
+	player          []deck.Card
+	dealer          []deck.Card
+	dealerAI        dealerAI
+	balance         int
+	blackjackPayout float64
 }
 
 func (g *Game) currentHand() *[]deck.Card {
@@ -56,8 +78,12 @@ func deal(g *Game) {
 }
 
 func (g *Game) Play(ai AI) int {
-	g.deck = deck.New(deck.Deck(3), deck.Shuffle())
-	for i := 0; i < 2; i++ {
+	g.deck = deck.New(deck.Deck(g.nDecks), deck.Shuffle())
+	min := 52 * g.nDecks / 3
+	for i := 0; i < g.nHands; i++ {
+		if len(g.deck) < min {
+			g.deck = deck.New(deck.Deck(g.nDecks), deck.Shuffle())
+		}
 		deal(g)
 		for g.state == statePlayerTurn {
 			hand := make([]deck.Card, len(g.player))
