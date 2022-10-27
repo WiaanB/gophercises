@@ -26,4 +26,7 @@ normalize some numbers and store them in PostgreSQL
 a basic deck of cards implementation to be used in a future project
 
 ## blackjack
-created a blackjack game with with the deck of cards created, along with a basic blackjack AI
+created a blackjack game with with the deck of cards created
+
+## blackjack_ai
+Created an automatic blackjack AI to play the game with implementation for betting
