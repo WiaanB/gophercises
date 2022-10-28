@@ -29,4 +29,4 @@ a basic deck of cards implementation to be used in a future project
 created a blackjack game with with the deck of cards created
 
 ## blackjack_ai
-Created an automatic blackjack AI to play the game with implementation for betting
+Created an automatic blackjack AI to play the game with implementation for betting, along with some other game specific settings
