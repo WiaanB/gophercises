@@ -95,6 +95,10 @@ func (g *Game) Play(ai AI) int {
 		}
 		bet(g, ai, shuffled)
 		deal(g)
+		if Blackjack(g.dealer...) {
+			endHand(g, ai)
+			continue
+		}
 		for g.state == statePlayerTurn {
 			hand := make([]deck.Card, len(g.player))
 			copy(hand, g.player)
@@ -107,7 +111,7 @@ func (g *Game) Play(ai AI) int {
 			move := g.dealerAI.Play(hand, g.dealer[0])
 			move(g)
 		}
-		EndHand(g, ai)
+		endHand(g, ai)
 	}
 	return g.balance
 }
@@ -132,27 +136,28 @@ func draw(cards []deck.Card) (deck.Card, []deck.Card) {
 	return cards[0], cards[1:]
 }
 
-func EndHand(g *Game, ai AI) {
+func endHand(g *Game, ai AI) {
 	pScore, dScore := Score(g.player...), Score(g.dealer...)
-	// TODO: figure out winnings and add/substract
+	pBlackjack, dBlackjack := Blackjack(g.player...), Blackjack(g.dealer...)
 	winnings := g.playerBet
 	switch {
+	case pBlackjack && dBlackjack:
+		winnings = 0
+	case dBlackjack:
+		winnings *= -1
+	case pBlackjack:
+		winnings = int(winnings * int(g.blackjackPayout))
 	case pScore > 21:
-		fmt.Println("You busted")
 		g.balance--
 		winnings *= -1
 	case dScore > 21:
-		fmt.Println("Dealer busted")
 		g.balance++
 	case pScore > dScore:
-		fmt.Println("You win!")
 		g.balance++
 	case dScore > pScore:
-		fmt.Println("You lose!")
 		g.balance--
 		winnings *= -1
 	case dScore == pScore:
-		fmt.Println("Draw!")
 		winnings = 0
 	}
 	g.balance += winnings
@@ -183,6 +188,11 @@ func Soft(hand ...deck.Card) bool {
 	minscore := minScore(hand...)
 	score := Score(hand...)
 	return minscore != score
+}
+
+// Blackjack returns true if a hand is a blackjack
+func Blackjack(hand ...deck.Card) bool {
+	return len(hand) == 2 && Score(hand...) == 21
 }
 
 func minScore(hand ...deck.Card) int {
