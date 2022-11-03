@@ -49,13 +49,15 @@ func (ai humanAi) Bet(shuffeled bool) int {
 func (ai humanAi) Play(hand []deck.Card, dealer deck.Card) Move {
 	var input string
 	for {
-		fmt.Printf("Player: %s\nDealer: %s\n%s", hand, dealer, "What will you do? (h)it, (s)tand\n")
+		fmt.Printf("Player: %s\nDealer: %s\n%s", hand, dealer, "What will you do? (h)it, (s)tand, (d)ouble\n")
 		fmt.Scanf("%s\n", &input)
 		switch input {
 		case "h":
 			return MoveHit
 		case "s":
 			return MoveStand
+		case "d":
+			return MoveDouble
 		default:
 			fmt.Println("invalid input: ", input)
 		}
