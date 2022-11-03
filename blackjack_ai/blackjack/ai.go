@@ -7,7 +7,7 @@ import (
 
 type AI interface {
 	Bet(shuffeled bool) int
-	Results(hand [][]deck.Card, dealer []deck.Card)
+	Results(hands [][]deck.Card, dealer []deck.Card)
 	Play(hand []deck.Card, dealer deck.Card) Move
 }
 
@@ -26,7 +26,7 @@ func (ai dealerAI) Play(hand []deck.Card, dealer deck.Card) Move {
 	return MoveStand
 }
 
-func (ai dealerAI) Results(hand [][]deck.Card, dealer []deck.Card) {
+func (ai dealerAI) Results(hands [][]deck.Card, dealer []deck.Card) {
 	//noop
 }
 
@@ -49,7 +49,7 @@ func (ai humanAi) Bet(shuffeled bool) int {
 func (ai humanAi) Play(hand []deck.Card, dealer deck.Card) Move {
 	var input string
 	for {
-		fmt.Printf("Player: %s\nDealer: %s\n%s", hand, dealer, "What will you do? (h)it, (s)tand, (d)ouble\n")
+		fmt.Printf("Player: %s\nDealer: %s\n%s", hand, dealer, "What will you do? (h)it, (s)tand, (d)ouble, s(p)lit\n")
 		fmt.Scanf("%s\n", &input)
 		switch input {
 		case "h":
@@ -58,12 +58,19 @@ func (ai humanAi) Play(hand []deck.Card, dealer deck.Card) Move {
 			return MoveStand
 		case "d":
 			return MoveDouble
+		case "p":
+			return MoveSplit
 		default:
 			fmt.Println("invalid input: ", input)
 		}
 	}
 }
 
-func (ai humanAi) Results(hand [][]deck.Card, dealer []deck.Card) {
-	fmt.Printf("==FINAL HANDS==\nPlayer: %s\nDealer: %s\n\n", hand, dealer)
+func (ai humanAi) Results(hands [][]deck.Card, dealer []deck.Card) {
+	fmt.Println("==FINAL HANDS==")
+	fmt.Println("Player")
+	for _, h := range hands {
+		fmt.Println(" ", h)
+	}
+	fmt.Println("Dealer: ", dealer)
 }
