@@ -2,7 +2,6 @@ package blackjack
 
 import (
 	"errors"
-	"fmt"
 	deck "workspace/deck_of_cards"
 )
 
@@ -239,7 +238,6 @@ func endRound(g *Game, ai AI) {
 	ai.Results(allHands, g.dealer)
 	g.player = nil
 	g.dealer = nil
-	fmt.Println()
 }
 
 // Score will take in a hand of cards and return the best blackback score
