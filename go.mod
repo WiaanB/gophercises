@@ -8,15 +8,12 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/spf13/cobra v1.5.0
 	golang.org/x/net v0.0.0-20220919171627-f8f703f97925
+	golang.org/x/text v0.3.7
 	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
 	github.com/inconshreveable/mousetrap v1.0.1 // indirect
-	github.com/josharian/impl v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	golang.org/x/mod v0.2.0 // indirect
 	golang.org/x/sys v0.0.0-20221013171732-95e765b1cc43 // indirect
-	golang.org/x/tools v0.0.0-20200522201501-cb1345f3a375 // indirect
-	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543 // indirect
 )
