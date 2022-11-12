@@ -30,3 +30,6 @@ created a blackjack game with with the deck of cards created
 
 ## blackjack_ai
 Created an automatic blackjack AI to play the game automatically with implementation for betting, along with some other game specific settings. (very terrible betting strategy implemented lol)
+
+## file_renamer
+A small script to process a few file names and rename them with a generic pattern
