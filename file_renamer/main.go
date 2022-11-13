@@ -11,42 +11,47 @@ import (
 	"golang.org/x/text/language"
 )
 
-func main() {
-	dir := "./sample"
-	files, err := os.ReadDir(dir)
-	if err != nil {
-		panic(err)
-	}
-	count := 0
-	var toRename []string
-	for _, file := range files {
-		if !file.IsDir() {
-			_, err := match(file.Name(), 4)
-			if err == nil {
-				count++
-				toRename = append(toRename, file.Name())
-			}
-		}
-	}
+type fileStruct struct {
+	path string
+	name string
+}
 
-	for _, origFileName := range toRename {
-		origPath := filepath.Join(dir, origFileName)
-		newName, err := match(origFileName, count)
-		if err != nil {
-			panic(err)
+func main() {
+	dir := "sample"
+	var toRename []fileStruct
+	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		// dont want to rename directories
+		if info.IsDir() {
+			return nil
 		}
-		newPath := filepath.Join(dir, newName)
-		fmt.Printf("mv %s => %s\n", origPath, newPath)
-		err = os.Rename(origPath, newPath)
+		if _, err := match(info.Name()); err == nil {
+			toRename = append(toRename, fileStruct{
+				name: info.Name(),
+				path: path,
+			})
+		}
+		return nil
+	})
+
+	for _, orig := range toRename {
+		var n fileStruct
+		var err error
+		n.name, err = match(orig.name)
 		if err != nil {
-			panic(err)
+			fmt.Println("Error matching:", orig.path, err.Error())
+		}
+		n.path = filepath.Join(dir, n.name)
+		fmt.Printf("mv %s => %s\n", orig.path, n.path)
+		err = os.Rename(orig.path, n.path)
+		if err != nil {
+			fmt.Println("Error renaming:", orig.path, err.Error())
 		}
 	}
 }
 
 // match returns the new file name, or an error if the file name
 // didn't match our pattern.
-func match(filename string, total int) (string, error) {
+func match(filename string) (string, error) {
 	pieces := strings.Split(filename, ".")
 	ext := pieces[len(pieces)-1]
 	tmp := strings.Join(pieces[0:len(pieces)-1], ".")
@@ -58,5 +63,5 @@ func match(filename string, total int) (string, error) {
 		return "", fmt.Errorf("%s didnt match our pattern", filename)
 	}
 
-	return fmt.Sprintf("%s - %d of %d.%s", cases.Title(language.Und, cases.NoLower).String(name), number, total, ext), nil
+	return fmt.Sprintf("%s - %d.%s", cases.Title(language.Und, cases.NoLower).String(name), number, ext), nil
 }
