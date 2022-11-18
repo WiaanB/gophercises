@@ -8,7 +8,6 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/spf13/cobra v1.5.0
 	golang.org/x/net v0.0.0-20220919171627-f8f703f97925
-	golang.org/x/text v0.3.7
 	gopkg.in/yaml.v2 v2.4.0
 )
 
