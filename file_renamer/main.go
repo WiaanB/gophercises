@@ -31,10 +31,10 @@ func main() {
 		newPath := filepath.Join(dir, newFileName)
 		fmt.Printf("mv %s => %s\n", oldPath, newPath)
 
-		// err := os.Rename(oldPath, newPath)
-		// if err != nil {
-		// 	fmt.Println("Error renaming: ", oldPath, newPath, err.Error())
-		// }
+		err := os.Rename(oldPath, newPath)
+		if err != nil {
+			fmt.Println("Error renaming: ", oldPath, newPath, err.Error())
+		}
 	}
 }
 
