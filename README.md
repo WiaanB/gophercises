@@ -35,4 +35,4 @@ Created an automatic blackjack AI to play the game automatically with implementa
 A small script to process a few file names and rename them with a generic pattern and tally the total files that match the same pattern.
 
 ## quiet hn
-Given an existing web application that displays stories from Hacker News, we will look at ways to add concurrency and caching to the application while looking for race conditions and other potential issues.
+Given an existing web application that displays stories from Hacker News, while looking at ways to add concurrency and caching to the application while looking for race conditions and other potential issues.
