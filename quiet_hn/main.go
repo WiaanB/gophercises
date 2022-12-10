@@ -33,7 +33,7 @@ func main() {
 func handler(numStories int, tpl *template.Template) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
-		stories, err := getTopStories(numStories)
+		stories, err := getCachedStories(numStories)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -47,6 +47,24 @@ func handler(numStories int, tpl *template.Template) http.HandlerFunc {
 			return
 		}
 	})
+}
+
+var (
+	cache           []item
+	cacheExpiration time.Time
+)
+
+func getCachedStories(numStories int) ([]item, error) {
+	if time.Since(cacheExpiration) < 0 {
+		return cache, nil
+	}
+	stories, err := getTopStories(numStories)
+	if err != nil {
+		return nil, err
+	}
+	cache = stories
+	cacheExpiration = time.Now().Add(15 * time.Second)
+	return cache, nil
 }
 
 func getTopStories(numStories int) ([]item, error) {
@@ -67,16 +85,15 @@ func getTopStories(numStories int) ([]item, error) {
 }
 
 func getStories(ids []int) []item {
-	var client hn.Client
 	type result struct {
 		idx  int
 		item item
 		err  error
 	}
 	resultCh := make(chan result)
-
 	for i := 0; i < len(ids); i++ {
 		go func(i, id int) {
+			var client hn.Client
 			hnItem, err := client.GetItem(id)
 			if err != nil {
 				resultCh <- result{idx: i, err: err}
