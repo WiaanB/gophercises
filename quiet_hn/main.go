@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"workspace/quiet_hn/hn"
@@ -52,9 +53,12 @@ func handler(numStories int, tpl *template.Template) http.HandlerFunc {
 var (
 	cache           []item
 	cacheExpiration time.Time
+	cacheMutex      sync.Mutex
 )
 
 func getCachedStories(numStories int) ([]item, error) {
+	cacheMutex.Lock()
+	defer cacheMutex.Unlock()
 	if time.Since(cacheExpiration) < 0 {
 		return cache, nil
 	}
@@ -63,7 +67,7 @@ func getCachedStories(numStories int) ([]item, error) {
 		return nil, err
 	}
 	cache = stories
-	cacheExpiration = time.Now().Add(15 * time.Second)
+	cacheExpiration = time.Now().Add(5 * time.Minute)
 	return cache, nil
 }
 
