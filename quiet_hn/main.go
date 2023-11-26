@@ -66,6 +66,7 @@ func getCachedStories(numStories int) ([]item, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("Hello")
 	cache = stories
 	cacheExpiration = time.Now().Add(5 * time.Minute)
 	return cache, nil
